@@ -8,29 +8,29 @@ import { HttpClient, HttpParams } from '@angular/common/http';
   providedIn: 'root'
 })
 export class TaskServiceService {
-  private list: Array<Task> = [];
   // private listDone: Array<Task> = [];
 
   private listObs = new BehaviorSubject<Array<Task>>([]);
   // private listDoneObs = new BehaviorSubject<Array<Task>>([]); niepotrzebne bo jest isDone
 
   constructor(private http: HttpClient) {
-    this.list = [
+    const list = [
       {name: 'kasia', created: new Date().toLocaleString(), end: new Date().toLocaleString(), isDone: true},
       {name: 'basie', created: new Date().toLocaleString(), isDone: false},
       {name: 'stasia', created: new Date().toLocaleString(), isDone: false},
       {name: 'kuba', created: new Date().toLocaleString(), isDone: false},
       {name: 'kajtek', created: new Date().toLocaleString(), isDone: false},
     ];
-    this.listObs.next(this.list);
+    this.listObs.next(list);
   }
   add(el: Task) {
-    this.list.push(el);
-    this.listObs.next(this.list);
+    const list = this.listObs.getValue();
+    list.push(el);
+    this.listObs.next(list);
   }
   remove(el: Task) {
-    this.list = this.list.filter(e => e !== el);
-    this.listObs.next(this.list);
+    const list = this.listObs.getValue().filter(e => e !== el);
+    this.listObs.next(list);
   }
   done(el: Task) {
     el.end = new Date().toLocaleString();
