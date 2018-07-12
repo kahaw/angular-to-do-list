@@ -1,0 +1,14 @@
+<ng-container *ngIf="list.length > 0; else noTasks">
+  <p [ngStyle]="{color: getColor()}">Zadan do wykonania: {{ list.length }}</p>
+  <ul>
+    <li appHover [date]="el.created" *ngFor="let el of list | sort; let odd=odd; let even=even" [ngClass]="{'class-li':odd,'class-nn': list.length===1}">
+      {{ el.name | transform: '!'}}
+      <button class="btn btn-success" (click)="remove(el)">Usun</button>
+      <button (click)="done(el)" class="btn btn-primary">Zrobone</button>
+      <button type="button" class="btn btn-warning">Warning</button>
+    </li>
+  </ul>
+  </ng-container>
+  <ng-template #noTasks>
+    <p>Nie ma taskow</p>
+  </ng-template>

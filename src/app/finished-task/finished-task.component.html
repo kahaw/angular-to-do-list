@@ -1,0 +1,7 @@
+<p>Wykonane zadania: {{listDone.length}}</p>
+<ul>
+  <li appChecked appHover [date]="item.end" *ngFor="let item of listDone">
+    <i class="material-icons">check_circle</i>
+    {{ item.name | transform: '-super!' | uppercase}}
+  </li>
+</ul>
