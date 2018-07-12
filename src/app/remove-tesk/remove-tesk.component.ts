@@ -14,7 +14,7 @@ export class RemoveTeskComponent implements OnInit {
 
   constructor(private service: TaskServiceService) {
     this.service.getList().subscribe(data => {
-      this.list = data;
+      this.list = data.filter(res => res.isDone !== true);
       // zeby Angular stworzyl nowa referencje, mogl zareagowac na modyfikacje nowych (dodanych) elementow
       this.list = [...this.list];
     });

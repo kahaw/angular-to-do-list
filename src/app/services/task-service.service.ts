@@ -34,9 +34,9 @@ export class TaskServiceService {
   }
   done(el: Task) {
     el.end = new Date().toLocaleString();
-    // this.listDone.push(el);
-    // this.listDoneObs.next(this.listDone);
-    this.remove(el);
+    el.isDone = true;
+    const list = this.listObs.getValue();
+    this.listObs.next(list);
   }
   getList(): Observable<Array<Task>> {
     return this.listObs.asObservable();
