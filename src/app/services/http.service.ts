@@ -1,5 +1,6 @@
+import { Task } from './../model/task';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -7,12 +8,32 @@ import { Observable } from 'rxjs';
 })
 export class HttpService {
   private headers = new HttpHeaders().set('Authorisation', 'token');
+  private params = new HttpParams().set('apiKey', 'oPIcl_-NUPevHxWtSFjKl3o8Tz1cTaQd');
+  readonly url = 'https://api.mlab.com/api/1/databases/angular_db/collections/tasks';
 
-  constructor(private htttp: HttpClient) { }
+  constructor(private htttp: HttpClient) {
+    this.getApiInfo();
+   }
+  getApiInfo(): Observable<any> {
+    return this.htttp.get<Array<Task>>(this.url, {params: this.params});
+  }
+  saveTask(list: Array<Task>) {
+    this.htttp.put(this.url, list, {params: this.params}).subscribe(data => {
+      console.log(data);
+    },
+    (error: HttpErrorResponse) => console.log(error));
+  }
+
+
+
+
+
+
+
   //get => pobranie danych
   getInfo(): Observable<any> {
-    return this.htttp.get('https://jsonplaceholder.typicode.com/posts',
-  {observe: 'body', responseType: 'json'});
+    return this.htttp.get(this.url,
+  {params: this.params, responseType: 'json'});
   }
   getDetails(url: string, id: string): Observable<any>  {
     return this.htttp.get(url + id, { headers: this.headers});

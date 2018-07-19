@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {Observable, BehaviorSubject} from 'rxjs';
 import { Task } from '../model/task';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpService } from './http.service';
 
 
 @Injectable({
@@ -13,15 +14,10 @@ export class TaskServiceService {
   private listObs = new BehaviorSubject<Array<Task>>([]);
   // private listDoneObs = new BehaviorSubject<Array<Task>>([]); niepotrzebne bo jest isDone
 
-  constructor(private http: HttpClient) {
-    const list = [
-      {name: 'kasia', created: new Date().toLocaleString(), end: new Date().toLocaleString(), isDone: true},
-      {name: 'basie', created: new Date().toLocaleString(), isDone: false},
-      {name: 'stasia', created: new Date().toLocaleString(), isDone: false},
-      {name: 'kuba', created: new Date().toLocaleString(), isDone: false},
-      {name: 'kajtek', created: new Date().toLocaleString(), isDone: false},
-    ];
-    this.listObs.next(list);
+  constructor(private http: HttpClient, private service: HttpService) {
+      this.service.getApiInfo().subscribe(data => {
+        this.listObs.next(data);
+      });
   }
   add(el: Task) {
     const list = this.listObs.getValue();
@@ -38,8 +34,12 @@ export class TaskServiceService {
     const list = this.listObs.getValue();
     this.listObs.next(list);
   }
+  showTask() {
+  }
   getList(): Observable<Array<Task>> {
     return this.listObs.asObservable();
   }
-
+  saveTaskInDb() {
+    this.service.saveTask(this.listObs.getValue());
+  }
 }
